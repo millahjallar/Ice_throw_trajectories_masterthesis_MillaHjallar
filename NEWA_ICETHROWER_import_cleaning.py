@@ -17,12 +17,12 @@ wind_distribution                : Set to False if you don't want to create wind
 wind_distribution_accretion_only : Set to False if you don't want to create wind distribution plot with only accretion hours.
 '''
 
-wind_rose = False
-wind_rose_accretion_only = False
-wind_distribution = False
-wind_distribution_accretion_only = False
+wind_rose = True
+wind_rose_accretion_only = True
+wind_distribution = True
+wind_distribution_accretion_only = True
 
-weather_path = '/Users/millaregineantonsenhjallar/Library/CloudStorage/OneDrive-UiTOffice365/mesotimeseries-Point 1.nc'
+weather_path = 'mesotimeseries-Point 1.nc'
 weather_data = xr.open_dataset(weather_path)
 weather_df = weather_data.to_dataframe()
 
