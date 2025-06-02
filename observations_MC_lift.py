@@ -30,9 +30,6 @@ z0 = 0.03                         # Roughness length (assumed)
 
 # ---------------------- Defining functions ----------------------
 
-'''def rotor_speed(wind_speed):
-    return MAX_OMEGA_ROTOR_SPEED * np.clip(wind_speed / MAX_WIND_SPEED, 0, 1)'''
-
 def wind_profile(z, u_star):
     z_eff = max(z, z0)
     return (u_star / VON_K) * np.log(z_eff / z0)
@@ -145,7 +142,6 @@ x_impacts = np.zeros(N)
 y_impacts = np.zeros(N)
 
 def main():
-    #OMEGA_ROTOR_SPEED = rotor_speed(WSPD)
     random_angles = np.random.uniform(0, 360, N)
     ejection_angles = np.zeros(N)
     u_stars = np.zeros(N)
@@ -244,15 +240,13 @@ def cartesian_to_polar(turbine_loc, arr_x, arr_y):
     arr_x = np.asarray(arr_x, dtype=float)
     arr_y = np.asarray(arr_y, dtype=float)
     
-    # Compute the angle in radians
     angles_rad = np.arctan2(arr_y - y_turbine, arr_x - x_turbine)
-    angles_rad = -(angles_rad - np.pi / 2)  # Rotate to 0° North, clockwise
+    angles_rad = -(angles_rad - np.pi / 2)
     angles_deg = np.degrees(angles_rad)
     angles_deg = (angles_deg + 360) % 360
     
     return angles_deg
 
-# Compute angles using the cartesian_to_polar function
 theta_dv_T1 = cartesian_to_polar(loc_DV_turbine, dv_distance_X_T1, dv_distance_Y_T1)
 theta_VF1_T5 = cartesian_to_polar(loc_VF1_turbine_5, vf1_distance_X_T5, vf1_distance_Y_T5)
 theta_VF1_T13 = cartesian_to_polar(loc_VF1_turbine_13, vf1_distance_X_T13, vf1_distance_Y_T13)
@@ -274,19 +268,17 @@ theta = np.concatenate([
     theta_VF5_T9,
     theta_VF6_T10])
 
-# Function for distance
 def euclidean_distances(turbine_loc, arr_x, arr_y):
     x_turbine, y_turbine = turbine_loc
     distances = []
 
     arr_x = np.asarray(arr_x)
     arr_y = np.asarray(arr_y)
-    # Looping through points for every location of impact to location of turbine
+
     for x_val, y_val in zip(arr_x, arr_y):
         dist = np.sqrt((x_turbine - x_val)**2 + (y_turbine - y_val)**2)
         distances.append(dist)
 
-    # Convert distances to meters from coordinates by subtracting from turbine location
     for x_val, y_val in zip(arr_x, arr_y):
         x_val = x_val - x_turbine
         y_val = y_val - y_turbine
@@ -340,16 +332,15 @@ dx_vf6_10, dy_vf6_10 = impact_xy_meters(loc_VF6_turbine_10, vf6_distance_X_T10, 
 x_points = np.concatenate((dx_dv, dx_vf1_5, dx_vf1_13, dx_vf2_6, dx_vf2_11, dx_vf2_12, dx_vf3_7, dx_vf4_8, dx_vf5_9, dx_vf6_10))
 y_points = np.concatenate((dy_dv, dy_vf1_5, dy_vf1_13, dy_vf2_6, dy_vf2_11, dy_vf2_12, dy_vf3_7, dy_vf4_8, dy_vf5_9, dy_vf6_10))
 
-# --------- All throws with wind speed ---------
-# ---------------------- Processing results ----------------------
+# --------------------------------------------
 
 def process_results(ejection_angles):
-    theta_obs = np.deg2rad(theta)       # to radians
-    r_obs     = points                   # already in meters
+    theta_obs = np.deg2rad(theta)
+    r_obs     = points
     r_sim     = np.hypot(x_impacts, y_impacts)
 
     theta_sim = np.arctan2(y_impacts, x_impacts)
-    theta_sim = -(theta_sim - np.pi / 2)  # Rotate to 0° North, clockwise
+    theta_sim = -(theta_sim - np.pi / 2)
     theta_sim = (theta_sim + 2*np.pi) % (2*np.pi)
     
     percentile_sim = np.percentile(r_sim, 90)
@@ -359,8 +350,8 @@ def process_results(ejection_angles):
     ax.scatter(theta_sim,  r_sim,  s=10, label=f'Monte Carlo simulation with lift (N={N})', alpha=0.1, color='tab:blue')
     ax.scatter(theta_obs, r_obs, s=10, label='Observational data (530 entries)', alpha=0.5, color='tab:orange')
 
-    ax.set_theta_zero_location('N')   # 0° at top
-    ax.set_theta_direction(-1) # Clockwise rotation
+    ax.set_theta_zero_location('N')
+    ax.set_theta_direction(-1)
 
     safety_distance = 1.5 * (95 + 90)
     theta_circle = np.linspace(0, 2*np.pi, 360)
@@ -387,9 +378,7 @@ def process_results(ejection_angles):
     ax.set_rmax(safety_distance * 1.3)
 
     ax.set_title('Observations vs. simulation with lift')
-    #ax.legend(loc='upper right', bbox_to_anchor=(1.1, 1.1))
     ax.legend(loc='lower right', bbox_to_anchor=(1.1, 0.0))
-    #ax.legend(loc='best')
     plt.show()
 
     # ------------------------------------------------------------------
@@ -439,16 +428,6 @@ def process_results(ejection_angles):
             writer.writerow(['r [m]','theta [rad]'])
             for rs, ts in zip(r_sim, theta_sim):
                 writer.writerow([rs, ts])
-
-    # corrcoef_r = np.corrcoef(r_obs, r_sim)[0, 1]
-    # print(f'{corrcoef_r}% Correlation coefficient with lift')
-    # corrcoef_theta = np.corrcoef(theta_obs, theta_sim)[0, 1]
-    # print(f'{corrcoef_theta}% Correlation coefficient with lift')
-
-    # ks_stat, ks_p = ks_2samp(r_obs, r_sim)
-    # theta_stat, theta_p = ks_2samp(theta_obs, theta_sim)
-    # print(f"lift: KS test on theta: D={theta_stat:.3f}, p={theta_p:.3f}")
-    # print(f"lift: KS test on r: D={ks_stat:.3f}, p={ks_p:.3f}")
 
 if __name__ == '__main__':
     main()

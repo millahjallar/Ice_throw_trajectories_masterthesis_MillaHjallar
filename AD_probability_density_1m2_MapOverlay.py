@@ -126,17 +126,12 @@ ax.imshow(
 ref_positions = np.array(all_turbine_impacts[0])
 kde = st.gaussian_kde(ref_positions, bw_method='scott')
 
-#x_min, x_max = -400, 400
-#y_min, y_max = -400, 400
-
 x_min, x_max = -240, 240
 y_min, y_max = -240, 240
 
-#x_grid = np.linspace(x_min, x_max, 801)  # 10 x 10 grid spacing
-#y_grid = np.linspace(y_min, y_max, 801)
-
 x_grid = np.linspace(x_min, x_max, 481) # 1x1m grid spacing
 y_grid = np.linspace(y_min, y_max, 481)
+
 X, Y = np.meshgrid(x_grid, y_grid)
 
 dx = x_grid[1] - x_grid[0]
@@ -164,42 +159,6 @@ for i in range(num_turbines):
         alpha=0.8,
     )
 
-'''ax.set_title('Probability of ice strikes per m$^{2}$')
-ax.tick_params(labelbottom=False, labelleft=False)
-
-# Define conversion functions between local (meter) coordinates and degrees.
-def x_to_lon(x):
-    return (x - min_x) / (max_x - min_x) * (maxlon - minlon) + minlon
-
-def lon_to_x(lon):
-    return (lon - minlon) / (maxlon - minlon) * (max_x - min_x) + min_x
-
-def y_to_lat(y):
-    return (y - min_y) / (max_y - min_y) * (maxlat - minlat) + minlat
-
-def lat_to_y(lat):
-    return (lat - minlat) / (maxlat - minlat) * (max_y - min_y) + min_y
-
-# Create secondary axes that use these conversion functions.
-secax_x = ax.secondary_xaxis('bottom', functions=(x_to_lon, lon_to_x))
-secax_y = ax.secondary_yaxis('left', functions=(y_to_lat, lat_to_y))
-
-secax_x.set_xlabel('Longitude [°]')
-secax_y.set_ylabel('Latitude [°]')
-
-# Set tick positions for the secondary axes (in degrees)
-secax_x.set_xticks(np.linspace(minlon, maxlon, 8))
-secax_y.set_yticks(np.linspace(minlat, maxlat, 8))
-
-secax_x.xaxis.set_major_formatter(mtick.FormatStrFormatter('%.2f'))
-secax_y.yaxis.set_major_formatter(mtick.FormatStrFormatter('%.2f'))
-
-cbar = fig.colorbar(cont, ax=ax)
-cbar.set_label('Probability Density [m$^{-2}$]')
-ax.grid(True)
-plt.show()'''
-
-#ax.set_title('Ice-strike probability density per $10 m^2$ x $10 m^2$ overlaid on map')
 ax.set_title('Ice-strike probability density per $m^2$ overlaid on map')
 ax.set_xlabel('X-coordinate of impact location [m]')
 ax.set_ylabel('Y-coordinate of impact location [m]')
@@ -213,10 +172,8 @@ for i in range(1, num_turbines):
 
 ax.scatter(0, 0, s=0.1, c='red', zorder=5, label='Turbine tower')
 ax.legend(loc='upper right', fontsize=8)
-# plotting the reference turbine tower
 
 cbar = fig.colorbar(cont, ax=ax, shrink=0.75)
-#cbar.set_label('Probability density per $10 m^2$ x $10 m^2$')
 cbar.set_label('Probability density per $m^2$')
 ax.grid(True)
 plt.savefig('map_contourfs.pdf', format='pdf')

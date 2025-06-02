@@ -17,8 +17,6 @@ x_edges = np.arange(np.floor(np.min(x_impacts)), np.ceil(np.max(x_impacts)), bin
 y_edges = np.arange(np.floor(np.min(y_impacts)), np.ceil(np.max(y_impacts)), bin_size)
 
 plt.figure(figsize=(10, 8))
-#_, _, _, hist = plt.hist2d(x_impacts, y_impacts, bins=[x_edges, y_edges], cmap='Wistia', cmin=1)
-#_, _, _, hist = plt.hist2d(x_impacts, y_impacts, bins=[x_edges, y_edges], cmap='viridis_r', cmin=1)
 _, _, _, hist = plt.hist2d(x_impacts, y_impacts, bins=[x_edges, y_edges], cmap='jet', cmin=1)
 plt.colorbar(hist, label='Counts of ice strikes per 10m x 10m')
 plt.scatter(0, 0, s=5, color='lightgrey', label='Turbine tower')
@@ -55,25 +53,25 @@ plt.show()
 
 
 # filter out the points with probability density > 1e-6
-'''prob = df['Probability [m^-2]'].to_numpy()
-df_f = df[(prob) > 1e-06]
+# prob = df['Probability [m^-2]'].to_numpy()
+# df_f = df[(prob) > 1e-06]
 
-x_impacts_f = df_f['X-coordinate [m]'].to_numpy()
-y_impacts_f = df_f['Y-coordinate [m]'].to_numpy()
+# x_impacts_f = df_f['X-coordinate [m]'].to_numpy()
+# y_impacts_f = df_f['Y-coordinate [m]'].to_numpy()
 
-x_edges_f = np.arange(np.floor(np.min(x_impacts_f)), np.ceil(np.max(x_impacts_f)), bin_size)
-y_edges_f = np.arange(np.floor(np.min(y_impacts_f)), np.ceil(np.max(y_impacts_f)), bin_size)
+# x_edges_f = np.arange(np.floor(np.min(x_impacts_f)), np.ceil(np.max(x_impacts_f)), bin_size)
+# y_edges_f = np.arange(np.floor(np.min(y_impacts_f)), np.ceil(np.max(y_impacts_f)), bin_size)
 
-plt.figure(figsize=(10, 8))
-_, _, _, hist_f = plt.hist2d(x_impacts_f, y_impacts_f, bins=[x_edges_f, y_edges_f], cmap='jet', cmin=1)
-plt.colorbar(hist_f, label='Counts of ice strikes per 10m x 10m')
-plt.scatter(0, 0, s=5, color='lightgrey', label='Turbine tower')
-plt.xlabel('X-coordinate of impact location [m]')
-plt.ylabel('Y-coordinate of impact location [m]')
-circle_f = plt.Circle((0, 0), safety_distance, color='red', fill=False, linestyle='-', label='Recommended safety distance')
-plt.gca().add_patch(circle_f)
-plt.xlim(-350, 350)
-plt.ylim(-350, 350)
-plt.title('Impact locations of ice throws in xy-plane with counts per 10m x 10m with probabilities > 1e-6')
-plt.legend(loc='upper right')
-plt.show()'''
+# plt.figure(figsize=(10, 8))
+# _, _, _, hist_f = plt.hist2d(x_impacts_f, y_impacts_f, bins=[x_edges_f, y_edges_f], cmap='jet', cmin=1)
+# plt.colorbar(hist_f, label='Counts of ice strikes per 10m x 10m')
+# plt.scatter(0, 0, s=5, color='lightgrey', label='Turbine tower')
+# plt.xlabel('X-coordinate of impact location [m]')
+# plt.ylabel('Y-coordinate of impact location [m]')
+# circle_f = plt.Circle((0, 0), safety_distance, color='red', fill=False, linestyle='-', label='Recommended safety distance')
+# plt.gca().add_patch(circle_f)
+# plt.xlim(-350, 350)
+# plt.ylim(-350, 350)
+# plt.title('Impact locations of ice throws in xy-plane with counts per 10m x 10m with probabilities > 1e-6')
+# plt.legend(loc='upper right')
+# plt.show()

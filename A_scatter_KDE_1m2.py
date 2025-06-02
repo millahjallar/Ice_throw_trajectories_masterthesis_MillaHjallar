@@ -6,13 +6,12 @@ import csv
 import datetime
 import scipy.stats as st
 import matplotlib.colors as colors
-from NEWA_ICETHROWER_import_cleaning import wspd, wdir
 
 
 N = 100000                        # number of simulations
 
 '''
-new_csv                      : Set to True if you want to create a new csv file.
+new_csv                      : Set to False if you don't want to create a new csv file.
 new_png                      : Set to True if you want to create a new png file.
 '''
 
@@ -41,12 +40,7 @@ z0 = 0.03                         # Roughness length (assumed)
 # ---------------------- Importing necessary data for windformation;) ----------------------
 # ------------------------------------------------------------------------------------------
 
-'''print('Mean wind speed with and without accretion hours:', np.mean(wspd_time))
-print('Mean wind speed with only accretion hours:', np.mean(wspd))
-print('Max wind speed with and without accretion hours:', np.max(wspd_time))
-print('Max wind speed with only accretion hours:', np.max(wspd))
-print('Mean wind direction with and without accretion hours:', np.mean(wdir_time))
-print('Mean wind direction with only accretion hours:', np.mean(wdir))'''
+from NEWA_ICETHROWER_import_cleaning import wspd, wdir
 
 ws = np.array(wspd)
 wd = np.array(wdir)
@@ -63,8 +57,6 @@ from NEWA_ICETHROWER_import_cleaning import lengths0, widths0, masses0
 
 areas = []
 masses = []
-#lengths = []
-#widths = []
 
 def thickness_from_mass(mass, length, width, rho_ice):
     return mass / (length * width * rho_ice)
@@ -80,8 +72,6 @@ for i in range(len(lengths0)):
     T_m = thickness_from_mass(m, L_m, W_m, RHO_ICE)
     A_eff = average_projected_area(L_m, W_m, T_m)
 
-    #lengths.append(L_m)
-    #widths.append(W_m)
     areas.append(A_eff)
     masses.append(m)
 
@@ -96,25 +86,11 @@ mass_tmp = masses[idx] + np.random.normal(0, 0.2 * np.median(masses), size=M)
 area_tmp = areas[idx] + np.random.normal(0, 0.2 * np.median(areas), size=M)
 
 mask = (mass_tmp > min(masses)) & (area_tmp > min(areas))
-#mask = (mass_tmp > 0) & (area_tmp > 0)
 mass_dist = mass_tmp[mask]
 area_dist = area_tmp[mask]
 
 mass_distribution = mass_dist[:N]
 area_distribution = area_dist[:N]
-
-# idx = np.random.choice(len(masses), size=N, replace=True)
-# mass_distribution = masses[idx].copy()
-# area_distribution = areas[idx].copy()
-
-# mass_noise_scale = 0.1 * np.median(masses)
-# area_noise_scale = 0.1 * np.median(areas)
-# mass_distribution += np.random.normal(0, mass_noise_scale, size=N)
-# area_distribution += np.random.normal(0, area_noise_scale, size=N)
-
-# mask = (mass_distribution > 0) & (area_distribution > 0)
-# mass_distribution = mass_distribution[mask]
-# area_distribution = area_distribution[mask]
 
 # ---------------------- Defining functions ----------------------
 # Logarithmic (log-law) wind profile
@@ -139,7 +115,7 @@ def rotor_speed(wind_speed):
     else:
         return 0.0
 
-# decompose wind speed into components
+# Decomposing wind speed into components
 def wind_components(wspd, wdir):
     theta = np.radians(wdir)
     '''
@@ -236,7 +212,6 @@ y_impacts = np.zeros(N)
 v_impacts = np.zeros(N)
 
 def main():
-    #OMEGA_ROTOR_SPEED = rotor_speed(WSPD)
     random_angles = np.random.uniform(0, 360, N)
     ejection_angles = np.zeros(N)
     omegas = np.zeros(N)

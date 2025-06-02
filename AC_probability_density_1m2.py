@@ -17,14 +17,15 @@ kde = st.gaussian_kde(positions)
 #x_min, x_max = -400, 400
 #y_min, y_max = -400, 400
 
-x_min, x_max = -240, 240
-y_min, y_max = -240, 240
-
 #x_grid = np.linspace(x_min, x_max, 801)  # 10 x 10 grid spacing
 #y_grid = np.linspace(y_min, y_max, 801)
 
+x_min, x_max = -240, 240
+y_min, y_max = -240, 240
+
 x_grid = np.linspace(x_min, x_max, 481) # 1x1m grid spacing
 y_grid = np.linspace(y_min, y_max, 481)
+
 X, Y = np.meshgrid(x_grid, y_grid)
 
 coords_for_kde = np.vstack([X.ravel(), Y.ravel()])
@@ -33,7 +34,6 @@ dx = x_grid[1] - x_grid[0]
 dy = y_grid[1] - y_grid[0]
 cell_area = dx * dy
 
-#Z = kde(coords_for_kde).reshape(X.shape)
 Z = cell_area * kde(coords_for_kde).reshape(X.shape)
 Z_masked = np.ma.masked_where(Z < 1e-6, Z)
 
@@ -41,7 +41,6 @@ fig, ax = plt.subplots(figsize=(8, 6))
 
 levels = np.logspace(-6, -4, 5)
 
-#cmap = plt.get_cmap('Blues', len(levels)-1)
 cmap = plt.get_cmap('Blues')
 
 fig, ax = plt.subplots(figsize=(8, 6))

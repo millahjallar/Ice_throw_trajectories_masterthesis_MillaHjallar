@@ -5,10 +5,10 @@ plt.style.use('seaborn-v0_8-whitegrid')
 
 state  = [0, 0, 0,  15, 0, -5]   # vx=15 m/s downwind, vz=−5 m/s up
 Cd, Cl = 1.0, 0.5
-A_ref  = 0.1                     # m²
-wspd   = 10                      # m/s
-wdir   = 0                       # coming from north
-RHO    = 1.225  # kg/m³
+A_ref  = 0.1
+wspd   = 10
+wdir   = 0
+RHO    = 1.225
 
 alph = np.deg2rad(270 - wdir)
 u = wspd * np.cos(alph)
@@ -19,8 +19,8 @@ dir_rel  = V_rel / np.linalg.norm(V_rel)
 dir_drag = -dir_rel
 dir_lift = np.array([-dir_rel[1], dir_rel[0]])
 
-L   = 0.7   # total length of fragment
-h   = 0.15  # thickness
+L = 0.7
+h = 0.15
 
 corners = []
 for s1 in [+1, -1]:

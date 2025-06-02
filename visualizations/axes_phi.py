@@ -1,6 +1,5 @@
 import matplotlib.pyplot as plt
 import numpy as np
-plt.style.use('seaborn-v0_8-whitegrid')
 
 R = 45
 arrow_length = 45
@@ -21,7 +20,6 @@ positions = {
     'φ=270': (0, -R)
 }
 
-# For a point (R*cos(θ), R*sin(θ)) on a circle, the counterclockwise tangent is given by (-sin(θ), cos(θ))
 tangent_vectors = {}
 for label, (x, y) in positions.items():
     theta = np.arctan2(y, x)

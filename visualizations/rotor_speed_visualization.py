@@ -2,12 +2,12 @@ import matplotlib.pyplot as plt
 import numpy as np
 import matplotlib.colors as colors
 
-RATED_WIND_SPEED = 12.0           # Rated wind speed [m/s]
-CUT_IN_WIND_SPEED = 3.0           # Cut-in wind speed [m/s]
-CUT_OUT_WIND_SPEED = 28.0         # Cut-out wind speed [m/s]
+RATED_WIND_SPEED = 12.0
+CUT_IN_WIND_SPEED = 3.0
+CUT_OUT_WIND_SPEED = 28.0
 R = 45
 
-wspd=np.linspace(0, 30, 100)  # Wind speed [m/s]
+wspd = np.linspace(0, 30, 100)
 
 def rotor_speed(wind_speed):
     MAX_OMEGA_ROTOR_SPEED = (7 * RATED_WIND_SPEED) / R 
